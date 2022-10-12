@@ -1,12 +1,12 @@
-import { User } from "@models/user";
-import AuthorizationException from "@response/authorization_exception";
-import EndpointNotFoundException from "@response/endpointnotfound_excepetion";
-import { BadParameterException, InvalidParameterException } from "@response/parameter_exception";
-import HttpResponse from "@response/response";
+import { User } from "../models/user";
+import AuthorizationException from "../response/authorization_exception";
+import EndpointNotFoundException from "../response/endpointnotfound_excepetion";
+import { BadParameterException } from "../response/parameter_exception";
+import HttpResponse from "../response/response";
 import { Request,Response,NextFunction } from "express";
 import md5 from 'md5'
 import jwt from 'jsonwebtoken'
-import { jwtOptions } from "@src/config";
+import { jwtOptions } from "../config";
 
 module UserControllers {
     export async function login(req: Request,res: Response,next: NextFunction) {
@@ -28,7 +28,7 @@ module UserControllers {
 
             const result = {
                 token,
-                user: user.toJSON()
+                user: user.toAPI()
             }
 
             next(new HttpResponse(result))
@@ -53,7 +53,7 @@ module UserControllers {
                 password: md5(password)
             })
 
-            next(new HttpResponse(data.toJSON()))
+            next(new HttpResponse(data.toAPI()))
         } catch(e) {
             next(e)
         }
@@ -61,7 +61,7 @@ module UserControllers {
     export async function user(req: Request,res: Response,next: NextFunction) {
         if(!req.context?.user) return next(new EndpointNotFoundException())
 
-        next(new HttpResponse(req.context.user.toJSON()))
+        next(new HttpResponse(req.context.user.toAPI()))
     }
 }
 export default UserControllers

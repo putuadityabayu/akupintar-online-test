@@ -15,9 +15,8 @@ export class Subject extends Model<SubjectAttribute,any,SubjectCreation> {
     declare sks: string
     declare major?: Major
 
-    // @ts-ignore
-    toJSON() {
-        const {createdAt:_,updatedAt:_a,majorId:_b,...rest} = super.toJSON()
+    toAPI() {
+        const {createdAt:_,updatedAt:_a,majorId:_b,...rest} = this.toJSON()
         return rest
     }
 }

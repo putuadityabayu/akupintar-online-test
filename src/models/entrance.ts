@@ -8,12 +8,10 @@ export type EntranceAttribute = {
     fees: number,
     website: string,
     condition: string
-}
-
-type EntranceCreation = {
     campus?: Campus[]
 }
-export class Entrance extends Model<EntranceAttribute,any,EntranceCreation> {
+
+export class Entrance extends Model<EntranceAttribute> {
     declare registration_from: Date
     declare registration_to: Date
     declare level: string

@@ -72,8 +72,8 @@ CREATE TABLE `campus` (
   PRIMARY KEY (`id`),
   KEY `statusId` (`statusId`),
   KEY `categoryId` (`categoryId`),
-  CONSTRAINT `campus_ibfk_129` FOREIGN KEY (`statusId`) REFERENCES `status` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `campus_ibfk_130` FOREIGN KEY (`categoryId`) REFERENCES `category` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `campus_ibfk_131` FOREIGN KEY (`statusId`) REFERENCES `status` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `campus_ibfk_132` FOREIGN KEY (`categoryId`) REFERENCES `category` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -182,9 +182,12 @@ CREATE TABLE `comment` (
   `updatedAt` datetime NOT NULL,
   `text` text NOT NULL,
   `discussionId` int DEFAULT NULL,
+  `userId` int DEFAULT NULL,
   PRIMARY KEY (`id`),
+  KEY `comment_userId_foreign_idx` (`userId`),
   KEY `discussionId` (`discussionId`),
-  CONSTRAINT `comment_ibfk_1` FOREIGN KEY (`discussionId`) REFERENCES `discussion` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `comment_ibfk_1` FOREIGN KEY (`discussionId`) REFERENCES `discussion` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `comment_userId_foreign_idx` FOREIGN KEY (`userId`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -216,9 +219,9 @@ CREATE TABLE `discussion` (
   KEY `userId` (`userId`),
   KEY `campusId` (`campusId`),
   KEY `scholarshipId` (`scholarshipId`),
-  CONSTRAINT `discussion_ibfk_193` FOREIGN KEY (`userId`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `discussion_ibfk_194` FOREIGN KEY (`campusId`) REFERENCES `campus` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `discussion_ibfk_195` FOREIGN KEY (`scholarshipId`) REFERENCES `scholarship` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `discussion_ibfk_196` FOREIGN KEY (`userId`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `discussion_ibfk_197` FOREIGN KEY (`campusId`) REFERENCES `campus` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `discussion_ibfk_198` FOREIGN KEY (`scholarshipId`) REFERENCES `scholarship` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -368,8 +371,8 @@ CREATE TABLE `major` (
   PRIMARY KEY (`id`),
   KEY `strataId` (`strataId`),
   KEY `facultyId` (`facultyId`),
-  CONSTRAINT `major_ibfk_129` FOREIGN KEY (`strataId`) REFERENCES `strata` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `major_ibfk_130` FOREIGN KEY (`facultyId`) REFERENCES `faculty` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `major_ibfk_131` FOREIGN KEY (`strataId`) REFERENCES `strata` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `major_ibfk_132` FOREIGN KEY (`facultyId`) REFERENCES `faculty` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=15739 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -429,8 +432,8 @@ CREATE TABLE `news` (
   PRIMARY KEY (`id`),
   KEY `campusId` (`campusId`),
   KEY `authorId` (`authorId`),
-  CONSTRAINT `news_ibfk_129` FOREIGN KEY (`campusId`) REFERENCES `campus` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `news_ibfk_130` FOREIGN KEY (`authorId`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `news_ibfk_131` FOREIGN KEY (`campusId`) REFERENCES `campus` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `news_ibfk_132` FOREIGN KEY (`authorId`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -602,7 +605,8 @@ CREATE TABLE `user` (
   UNIQUE KEY `username_23` (`username`),
   UNIQUE KEY `username_24` (`username`),
   UNIQUE KEY `username_25` (`username`),
-  UNIQUE KEY `username_26` (`username`)
+  UNIQUE KEY `username_26` (`username`),
+  UNIQUE KEY `username_27` (`username`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -625,4 +629,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-10-13  0:30:05
+-- Dump completed on 2022-10-13  1:43:05

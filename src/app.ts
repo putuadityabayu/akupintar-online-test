@@ -4,12 +4,14 @@ import limiter from "./middleware/limiter";
 import responseMiddleware from "./middleware/response";
 import compression from 'compression';
 import authorization, { loginMiddleware } from "./middleware/authorization";
-import UserControllers from "@controllers/user";
-import CampusControllers from "@controllers/campus";
+import UserControllers from "./controllers/user";
+import CampusControllers from "./controllers/campus";
 
 app.use(compression())
 app.disable("x-powered-by");
-app.use(limiter)
+if(process.env.NODE_ENV !== "test") {
+    app.use(limiter)
+}
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 

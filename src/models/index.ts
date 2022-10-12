@@ -1,6 +1,6 @@
 import { Alumni } from "./alumni";
 import {Campus, Category, Status} from "./campus";
-import { Comment } from "./commentar";
+import { Comment } from "./comment";
 import { Discussion, Votes } from "./discussion";
 import { Entrance } from "./entrance";
 import { Faculty } from "./faculty";
@@ -80,6 +80,9 @@ function initRelation() {
      */
     Comment.belongsTo(Discussion,{onDelete:"CASCADE"})
     Discussion.hasMany(Comment,{onDelete:"CASCADE"})
+    
+    Comment.belongsTo(User,{onDelete:"CASCADE"})
+    User.hasMany(Comment,{onDelete:"CASCADE"})
 
     /**
      * Alumni

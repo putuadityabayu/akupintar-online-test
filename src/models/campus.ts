@@ -66,12 +66,9 @@ export type CampusAttribute = BaseAttribute & {
     phone_number: string|null
     fax: string|number,
     rangking: number|null,
-    politeknik: boolean
+    politeknik?: boolean
     statusId?: number|null
     categoryId?: number|null
-}
-
-export type CampusCreation = {
     faculties?: Faculty[]
     articles?: News[]
     alumni?: Alumni[]
@@ -85,7 +82,8 @@ export type CampusCreation = {
         name: string
     }
 }
-export class Campus extends Model<CampusAttribute,'politeknik',CampusCreation> {
+
+export class Campus extends Model<CampusAttribute> {
     declare name: string
     declare accreditation: string|null
     declare category?: Category
@@ -94,6 +92,11 @@ export class Campus extends Model<CampusAttribute,'politeknik',CampusCreation> {
     declare history: string|null
     declare achievement: string|null
     declare location: string
+    declare image: string|null
+    declare phone_number: string|null
+    declare fax: string|number
+    declare rangking: number|null
+    declare politeknik: boolean
     declare faculties?: Faculty[]
     declare articles?: News[]
     declare alumnus?: Alumni[]
@@ -127,9 +130,8 @@ export class Campus extends Model<CampusAttribute,'politeknik',CampusCreation> {
     declare countAlumnus: HasManyCountAssociationsMixin;
     declare createAlumni: HasManyCreateAssociationMixin<Alumni,'campusId'>;
 
-    // @ts-ignore
-    public toJSON() {
-        const {createdAt:_,updatedAt:_a,statusId:_b,categoryId:_c,...rest} = super.toJSON()
+    toAPI() {
+        const {createdAt:_,updatedAt:_a,statusId:_b,categoryId:_c,...rest} = this.toJSON()
         const status = this.status?.toAPI();
         const category = this.category?.toAPI();
 

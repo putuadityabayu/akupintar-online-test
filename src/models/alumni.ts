@@ -6,19 +6,16 @@ export type AlumniAttribute = BaseAttribute & {
     position: string
     image: string|null
     campusId?: string|null
-}
-type AlumniCreation = {
     campus?: Campus
 }
-export class Alumni extends Model<AlumniAttribute,any,AlumniCreation> {
+export class Alumni extends Model<AlumniAttribute> {
     declare name: string
     declare position: string
     declare image: string|null
     declare campus?: Campus
 
-    // @ts-ignore
-    toJSON() {
-        const {createdAt:_,updatedAt:_a,campusId:_b,...rest} = super.toJSON()
+    toAPI() {
+        const {createdAt:_,updatedAt:_a,campusId:_b,...rest} = this.toJSON()
         const campus = this.campus?.toJSON()
         return {...rest,campus};
     }

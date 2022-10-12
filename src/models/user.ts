@@ -16,8 +16,7 @@ export class User extends Model<UserAttribute> {
     declare following?: Campus[]
     declare major_likes?: Major[]
 
-    // @ts-ignore
-    toJSON() {
+    toAPI() {
         const {id,username,name} = this;
         return {id,username,name}
     }

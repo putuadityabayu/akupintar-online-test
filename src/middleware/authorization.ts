@@ -1,6 +1,6 @@
-import { User } from '@models/user';
-import AuthorizationException from '@response/authorization_exception';
-import { jwtOptions } from '@src/config';
+import { User } from '../models/user';
+import AuthorizationException from '../response/authorization_exception';
+import { jwtOptions } from '../config';
 import { Request,Response,NextFunction } from 'express';
 import jwt,{JsonWebTokenError} from 'jsonwebtoken'
 

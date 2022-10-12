@@ -1,4 +1,4 @@
-import { User } from "@models/user"
+import { User } from "./models/user"
 
 export type CopyPartial<Base,WhichPartial extends keyof Base> = Omit<Base,WhichPartial> & Partial<Base>
 

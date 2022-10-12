@@ -52,9 +52,8 @@ export class Major extends Model<MajorAttribute,any,MajorCreation> {
     declare hasSubjects: HasManyHasAssociationsMixin<Subject, number>;
     declare createSubject: HasManyCreateAssociationMixin<Subject,'majorId'>;
     
-    // @ts-ignore
-    toJSON() {
-        const {createdAt:_,updatedAt:_a,strataId:_c,ukt_maximum:maximum,ukt_minimum:minimum,facultyId:_d,...data} = super.toJSON()
+    toAPI() {
+        const {createdAt:_,updatedAt:_a,strataId:_c,ukt_maximum:maximum,ukt_minimum:minimum,facultyId:_d,...data} = this.toJSON()
         const faculty = this.faculty?.toJSON();
         const strata = this.strata?.toJSON();
         return {

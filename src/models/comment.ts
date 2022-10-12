@@ -5,18 +5,15 @@ import type { User } from './user'
 export type CommentAttribute = BaseAttribute & {
     text: string
     discussionId?: number|null
-}
-type CommentCreation = {
     discussion?: Discussion
 }
-export class Comment extends Model<CommentAttribute,any,CommentCreation> {
+export class Comment extends Model<CommentAttribute> {
     declare text: string
     declare user?: User
     declare discussion?: Discussion
 
-    // @ts-ignore
-    toJSON() {
-        const {updatedAt:_,discussionId:_a,...data} = super.toJSON();
+    toAPI() {
+        const {updatedAt:_,discussionId:_a,...data} = this.toJSON();
         return data
     }
 }

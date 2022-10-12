@@ -1,6 +1,6 @@
 import type { HasManyAddAssociationsMixin, HasManyRemoveAssociationMixin, HasManyHasAssociationMixin } from 'sequelize'
 import type { Campus } from './campus'
-import type { Comment } from './commentar'
+import type { Comment } from './comment'
 import {sequelize,BaseAttribute,baseAttribute,Model,DataTypes, Creation} from './helper'
 import type { Scholarship } from './scholarship'
 import { User } from './user'
@@ -10,16 +10,14 @@ export type DiscussionAttribute = BaseAttribute & {
     campusId?: number|null
     scholarshipId?: number|null
     userId?: number|null
-}
-export type DiscussionCreation = {
     campus?: Campus,
     user?: User,
     scholarship?: Scholarship
     comments?: Comment[],
-    votes?: Votes[],
-    userId?: number|null
+    votes?: Votes[]
 }
-export class Discussion extends Model<DiscussionAttribute,any,DiscussionCreation> {
+
+export class Discussion extends Model<DiscussionAttribute> {
     declare id: number
     declare createdAt: Date
     declare updatedAt: Date
@@ -34,9 +32,8 @@ export class Discussion extends Model<DiscussionAttribute,any,DiscussionCreation
     declare removeVote: HasManyRemoveAssociationMixin<User, number>;
     declare hasVote: HasManyHasAssociationMixin<User, number>;
 
-    // @ts-ignore
-    toJSON() {
-        const {updatedAt:_,campusId:_a,scholarshipId:_b,userId:_c,...data} = super.toJSON();
+    toAPI() {
+        const {updatedAt:_,campusId:_a,scholarshipId:_b,userId:_c,...data} = this.toJSON();
         return data
     }
 }

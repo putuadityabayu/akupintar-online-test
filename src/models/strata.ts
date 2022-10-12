@@ -14,9 +14,8 @@ export class Strata extends Model<StrataAttribute,any,StrataCreation> {
     declare name: string
     declare majors?: Major[]
 
-    // @ts-ignore
-    toJSON() {
-        const {createdAt:_,updatedAt:_a,...data} = super.toJSON()
+    toAPI() {
+        const {createdAt:_,updatedAt:_a,...data} = this.toJSON()
         return {...data}
     }
 }

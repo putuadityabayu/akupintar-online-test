@@ -1,14 +1,13 @@
-import { Campus, Category, Status } from "@models/campus";
-import { Faculty } from "@models/faculty";
-import { Major } from "@models/major";
-import { Strata } from "@models/strata";
-import { Subject } from "@models/subject";
-import { User } from "@models/user";
-import EndpointNotFoundException from "@response/endpointnotfound_excepetion";
-import NotFoundException from "@response/notfound_exception";
-import HttpResponse from "@response/response";
+import { Campus, Category, Status } from "../models/campus";
+import { Faculty } from "../models/faculty";
+import { Major } from "../models/major";
+import { Strata } from "../models/strata";
+import { User } from "../models/user";
+import EndpointNotFoundException from "../response/endpointnotfound_excepetion";
+import NotFoundException from "../response/notfound_exception";
+import HttpResponse from "../response/response";
 import { Request,Response,NextFunction } from "express";
-import { CreationAttributes, Op } from "sequelize";
+import { Op } from "sequelize";
 
 module CampusControllers {
     export async function search(req: Request,_: Response,next: NextFunction) {
@@ -43,7 +42,7 @@ module CampusControllers {
             const total_pages = Math.ceil(total/page_size);
             const data = await Promise.all(rows?.map(async(c)=>{
                 const is_followed = req.context?.user ? await c.hasFollower(req.context.user as User) : false
-                const {followers:_,...rest} = c.toJSON();
+                const {followers:_,...rest} = c.toAPI();
                 return {
                     ...rest,
                     is_followed
@@ -149,7 +148,7 @@ module CampusControllers {
                 }]
             })
             const total_pages = Math.ceil(total/page_size);
-            const data = rows?.map(c=>c.toJSON())
+            const data = rows?.map(c=>c.toAPI())
 
             const result = {
               page,

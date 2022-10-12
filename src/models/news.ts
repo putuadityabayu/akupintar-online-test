@@ -19,8 +19,8 @@ export class News extends Model<NewsAttribute,any,NewsCreation> {
     declare campus?: Campus
     declare author?: User
 
-    toJSON() {
-        const {campusId:_,authorId:_a,...data} = super.toJSON()
+    toAPI() {
+        const {campusId:_,authorId:_a,...data} = this.toJSON()
         return data
     }
 }

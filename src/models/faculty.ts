@@ -8,13 +8,10 @@ export type FacultyAttribute = BaseAttribute & {
     name: string
     campusId?: number|null
     campus?: Campus
+    majors?: Major[]
 }
 
-type FacultyCreation = {
-    majors?: Major[]
-    campus?: Campus
-}
-export class Faculty extends Model<FacultyAttribute,any,FacultyCreation> {
+export class Faculty extends Model<FacultyAttribute> {
     declare name: string
     declare majors?: Major[]
     declare campus?: Campus
@@ -27,9 +24,9 @@ export class Faculty extends Model<FacultyAttribute,any,FacultyCreation> {
     declare hasMajors: HasManyHasAssociationsMixin<Major, number>;
     declare createMajor: HasManyCreateAssociationMixin<Major,'facultyId'>;
 
-    toJSON() {
+    toAPI() {
         const {createdAt:_,updatedAt:_a,campusId:_b,campus:_c,...data} = super.toJSON()
-        const majors = this.majors?.map(c=>c.toJSON()) as Record<string,any>|undefined
+        const majors = this.majors?.map(c=>c.toJSON()) as Record<string,any>[]|undefined
         return {...data,majors}
     }
 }
