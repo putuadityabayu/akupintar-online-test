@@ -34,7 +34,7 @@ module CampusControllers {
             const total_pages = Math.ceil(total/page_size);
 
             const data = req.context?.user ? await Promise.all(rows?.map(async(c)=>{
-                const is_followed = await c.hasFollowers(req.context.user as User)
+                const is_followed = await c.hasFollower(req.context.user as User)
                 return {
                     ...c.toAPI(),
                     is_followed

@@ -1,7 +1,7 @@
 import { Alumni } from "./alumni";
 import {Campus} from "./campus";
 import { Comment } from "./commentar";
-import { Discussion } from "./discussion";
+import { Discussion, Votes } from "./discussion";
 import { Entrance } from "./entrance";
 import { Faculty } from "./faculty";
 import { sequelize } from "./helper";
@@ -80,7 +80,7 @@ function initRelation() {
     /**
      * Following List
      */
-    Campus.belongsToMany(User,{through:'follow_list',as:'followers'})
+    Campus.belongsToMany(User,{through:'follow_list',as:{singular:"follower",plural:"followers"}})
     User.belongsToMany(Campus,{through:'follow_list',as:'following'})
 
     /**
@@ -96,4 +96,9 @@ function initRelation() {
      */
     Entrance.belongsToMany(Campus,{through:"campus_entrance",as:"campus"})
     Campus.belongsToMany(Entrance,{through:"campus_entrance",as:"entrances"})
+
+    /**
+     * Votes
+     */
+    Discussion.belongsToMany(User,{through:Votes,as:{singular:'vote',plural:'votes'}})
 }

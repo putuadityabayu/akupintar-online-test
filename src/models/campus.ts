@@ -1,4 +1,4 @@
-import { HasManyAddAssociationsMixin, HasManyRemoveAssociationMixin, HasManyHasAssociationMixin } from "sequelize";
+import type { HasManyAddAssociationsMixin, HasManyRemoveAssociationMixin, HasManyHasAssociationMixin } from "sequelize";
 import type { Alumni } from "./alumni";
 import type { Discussion } from "./discussion";
 import type { Entrance } from "./entrance";
@@ -46,9 +46,9 @@ export class Campus extends Model<CampusAttribute,any,CampusCreation> {
     declare scholarship?: Scholarship[]
     declare entrances?: Entrance[]
 
-    declare addFollowers: HasManyAddAssociationsMixin<User, number>;
-    declare removeFollowers: HasManyRemoveAssociationMixin<User, number>;
-    declare hasFollowers: HasManyHasAssociationMixin<User, number>;
+    declare addFollower: HasManyAddAssociationsMixin<User, number>;
+    declare removeFollower: HasManyRemoveAssociationMixin<User, number>;
+    declare hasFollower: HasManyHasAssociationMixin<User, number>;
     
     toAPI() {
         const {createdAt:_,updatedAt:_a,...rest} = this.toJSON()

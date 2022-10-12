@@ -1,8 +1,9 @@
+import type { HasManyAddAssociationsMixin, HasManyRemoveAssociationMixin, HasManyHasAssociationMixin } from 'sequelize'
 import type { Campus } from './campus'
 import type { Comment } from './commentar'
 import {sequelize,BaseAttribute,baseAttribute,Model,DataTypes, Creation} from './helper'
 import type { Scholarship } from './scholarship'
-import type { User } from './user'
+import { User } from './user'
 
 export type DiscussionAttribute = BaseAttribute & {
     text: string
@@ -10,7 +11,8 @@ export type DiscussionAttribute = BaseAttribute & {
 export type DiscussionCreation = {
     campus?: Campus,
     user?: User,
-    comments?: Comment[]
+    comments?: Comment[],
+    votes?: Votes[]
 }
 export class Discussion extends Model<DiscussionAttribute,any,DiscussionCreation> {
     declare id: number
@@ -21,6 +23,11 @@ export class Discussion extends Model<DiscussionAttribute,any,DiscussionCreation
     declare campus?: Campus
     declare scholarship?: Scholarship
     declare comments?: Comment[]
+    declare votes?: Votes[]
+
+    declare addVote: HasManyAddAssociationsMixin<User, number>;
+    declare removeVote: HasManyRemoveAssociationMixin<User, number>;
+    declare hasVote: HasManyHasAssociationMixin<User, number>;
 
     toAPI() {
         const {updatedAt:_,...data} = this.toJSON();
@@ -52,4 +59,22 @@ Discussion.init({
     tableName:"discussion",
     timestamps:true,
     deletedAt:false
+})
+
+type VotesAttribute = {
+    type: 'up'|'down'
+}
+export class Votes extends Model<VotesAttribute> {
+    declare type: 'up'|'down'
+}
+Votes.init({
+    type:{
+        type: DataTypes.STRING(4),
+        allowNull:false
+    }
+},{
+    sequelize,
+    modelName:'discussion_votes',
+    tableName:'discussion_votes',
+    timestamps:false
 })
