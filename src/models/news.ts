@@ -1,20 +1,27 @@
 import type { Campus } from './campus'
 import {sequelize,BaseAttribute,baseAttribute,Model,DataTypes} from './helper'
+import type { User } from './user'
 
 export type NewsAttribute = BaseAttribute & {
     title: string
     text: string
+    campusId?: number|null
+    authorId?: number|null
 }
 
-export class News extends Model<NewsAttribute,any,{campus?: Campus}> {
+export type NewsCreation = {
+    campus?: Campus
+    author?: User
+}
+export class News extends Model<NewsAttribute,any,NewsCreation> {
     declare title: string
     declare text: string
     declare campus?: Campus
+    declare author?: User
 
-    toAPI() {
-        const data = this.toJSON()
-        const campus = this.campus?.toAPI()
-        return {...data,campus}
+    toJSON() {
+        const {campusId:_,authorId:_a,...data} = super.toJSON()
+        return data
     }
 }
 News.init({
@@ -28,7 +35,7 @@ News.init({
     }
 },{
     sequelize,
-    modelName:"news",
+    modelName:"article",
     tableName:"news",
     timestamps:true,
     deletedAt:false

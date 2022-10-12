@@ -7,12 +7,17 @@ import { User } from './user'
 
 export type DiscussionAttribute = BaseAttribute & {
     text: string
+    campusId?: number|null
+    scholarshipId?: number|null
+    userId?: number|null
 }
 export type DiscussionCreation = {
     campus?: Campus,
     user?: User,
+    scholarship?: Scholarship
     comments?: Comment[],
-    votes?: Votes[]
+    votes?: Votes[],
+    userId?: number|null
 }
 export class Discussion extends Model<DiscussionAttribute,any,DiscussionCreation> {
     declare id: number
@@ -29,21 +34,10 @@ export class Discussion extends Model<DiscussionAttribute,any,DiscussionCreation
     declare removeVote: HasManyRemoveAssociationMixin<User, number>;
     declare hasVote: HasManyHasAssociationMixin<User, number>;
 
-    toAPI() {
-        const {updatedAt:_,...data} = this.toJSON();
-        const user = this.user?.toAPI();
-        const campus = this.campus?.toAPI()
-        const scholarship = this.scholarship?.toAPI()
-        const comments = this.comments?.map(c=>c.toAPI())
-        return {
-            ...data,
-            user,
-            ...(campus ? {
-                campus
-            } : scholarship ? {
-                scholarship
-            } : {}),
-            comments}
+    // @ts-ignore
+    toJSON() {
+        const {updatedAt:_,campusId:_a,scholarshipId:_b,userId:_c,...data} = super.toJSON();
+        return data
     }
 }
 Discussion.init({

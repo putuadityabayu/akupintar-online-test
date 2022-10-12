@@ -35,6 +35,10 @@ export abstract class Model<A extends {} = any,C extends keyof A = any, D extend
     declare id: number
     declare createdAt: Date
     declare updatedAt: Date
+
+    toJSON() {
+        return super.toJSON()
+    }
 }
 
 export type Creation<D extends {
@@ -47,6 +51,6 @@ Others | 'id'|'createdAt'|'updatedAt'
 
 export type BaseAttribute = {
     id: number
-    createdAt: Date
-    updatedAt: Date
+    createdAt?: Date
+    updatedAt?: Date
 }

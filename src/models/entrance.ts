@@ -23,11 +23,6 @@ export class Entrance extends Model<EntranceAttribute,any,EntranceCreation> {
 
     declare campus?: Campus[]
 
-    toAPI() {
-        const data = this.toJSON();
-        const campus = this.campus?.map(c=>c.toAPI())
-        return {...data,campus}
-    }
 }
 Entrance.init({
     ...baseAttribute,

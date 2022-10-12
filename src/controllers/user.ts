@@ -28,7 +28,7 @@ module UserControllers {
 
             const result = {
                 token,
-                user: user.toAPI()
+                user: user.toJSON()
             }
 
             next(new HttpResponse(result))
@@ -53,7 +53,7 @@ module UserControllers {
                 password: md5(password)
             })
 
-            next(new HttpResponse(data.toAPI()))
+            next(new HttpResponse(data.toJSON()))
         } catch(e) {
             next(e)
         }
@@ -61,7 +61,7 @@ module UserControllers {
     export async function user(req: Request,res: Response,next: NextFunction) {
         if(!req.context?.user) return next(new EndpointNotFoundException())
 
-        next(new HttpResponse(req.context.user.toAPI()))
+        next(new HttpResponse(req.context.user.toJSON()))
     }
 }
 export default UserControllers

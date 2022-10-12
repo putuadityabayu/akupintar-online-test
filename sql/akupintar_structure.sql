@@ -47,9 +47,8 @@ CREATE TABLE `campus` (
   `id` int NOT NULL AUTO_INCREMENT,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
-  `accreditation` varchar(1) NOT NULL,
-  `category` text NOT NULL,
-  `status` text NOT NULL,
+  `name` text,
+  `accreditation` varchar(1) DEFAULT NULL,
   `profile` text,
   `history` text,
   `achievement` text,
@@ -58,8 +57,15 @@ CREATE TABLE `campus` (
   `phone_number` text,
   `fax` text,
   `rangking` int DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `politeknik` tinyint(1) DEFAULT '0',
+  `statusId` int DEFAULT NULL,
+  `categoryId` int DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `statusId` (`statusId`),
+  KEY `categoryId` (`categoryId`),
+  CONSTRAINT `campus_ibfk_129` FOREIGN KEY (`statusId`) REFERENCES `status` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `campus_ibfk_130` FOREIGN KEY (`categoryId`) REFERENCES `category` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -101,6 +107,22 @@ CREATE TABLE `campus_scholarship` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `category`
+--
+
+DROP TABLE IF EXISTS `category`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `category` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `createdAt` datetime NOT NULL,
+  `updatedAt` datetime NOT NULL,
+  `name` text NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `comment`
 --
 
@@ -138,9 +160,27 @@ CREATE TABLE `discussion` (
   KEY `userId` (`userId`),
   KEY `campusId` (`campusId`),
   KEY `scholarshipId` (`scholarshipId`),
-  CONSTRAINT `discussion_ibfk_12` FOREIGN KEY (`userId`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `discussion_ibfk_13` FOREIGN KEY (`campusId`) REFERENCES `campus` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `discussion_ibfk_14` FOREIGN KEY (`scholarshipId`) REFERENCES `scholarship` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `discussion_ibfk_193` FOREIGN KEY (`userId`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `discussion_ibfk_194` FOREIGN KEY (`campusId`) REFERENCES `campus` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `discussion_ibfk_195` FOREIGN KEY (`scholarshipId`) REFERENCES `scholarship` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `discussion_votes`
+--
+
+DROP TABLE IF EXISTS `discussion_votes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `discussion_votes` (
+  `type` varchar(4) NOT NULL,
+  `discussionId` int NOT NULL,
+  `userId` int NOT NULL,
+  PRIMARY KEY (`discussionId`,`userId`),
+  KEY `userId` (`userId`),
+  CONSTRAINT `discussion_votes_ibfk_1` FOREIGN KEY (`discussionId`) REFERENCES `discussion` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `discussion_votes_ibfk_2` FOREIGN KEY (`userId`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -176,12 +216,12 @@ CREATE TABLE `faculty` (
   `id` int NOT NULL AUTO_INCREMENT,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
-  `campusId` int DEFAULT NULL,
   `name` text NOT NULL,
+  `campusId` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `campusId` (`campusId`),
   CONSTRAINT `faculty_ibfk_1` FOREIGN KEY (`campusId`) REFERENCES `campus` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1039 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -214,16 +254,39 @@ CREATE TABLE `major` (
   `id` int NOT NULL AUTO_INCREMENT,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
+  `name` text,
   `accreditation` varchar(1) DEFAULT NULL,
   `ukt_maximum` bigint DEFAULT NULL,
   `ukt_minimum` bigint DEFAULT NULL,
   `website` text,
   `prospect` text,
   `learned` text,
+  `strataId` int DEFAULT NULL,
   `facultyId` int DEFAULT NULL,
   PRIMARY KEY (`id`),
+  KEY `strataId` (`strataId`),
   KEY `facultyId` (`facultyId`),
-  CONSTRAINT `major_ibfk_1` FOREIGN KEY (`facultyId`) REFERENCES `faculty` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `major_ibfk_129` FOREIGN KEY (`strataId`) REFERENCES `strata` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `major_ibfk_130` FOREIGN KEY (`facultyId`) REFERENCES `faculty` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=15739 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `major_likes`
+--
+
+DROP TABLE IF EXISTS `major_likes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `major_likes` (
+  `createdAt` datetime NOT NULL,
+  `updatedAt` datetime NOT NULL,
+  `majorId` int NOT NULL,
+  `userId` int NOT NULL,
+  PRIMARY KEY (`majorId`,`userId`),
+  KEY `userId` (`userId`),
+  CONSTRAINT `major_likes_ibfk_1` FOREIGN KEY (`majorId`) REFERENCES `major` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `major_likes_ibfk_2` FOREIGN KEY (`userId`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -241,9 +304,12 @@ CREATE TABLE `news` (
   `title` text NOT NULL,
   `text` text,
   `campusId` int DEFAULT NULL,
+  `authorId` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `campusId` (`campusId`),
-  CONSTRAINT `news_ibfk_1` FOREIGN KEY (`campusId`) REFERENCES `campus` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  KEY `authorId` (`authorId`),
+  CONSTRAINT `news_ibfk_129` FOREIGN KEY (`campusId`) REFERENCES `campus` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `news_ibfk_130` FOREIGN KEY (`authorId`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -266,13 +332,45 @@ CREATE TABLE `scholarship` (
   `selection` datetime DEFAULT NULL,
   `announcement` datetime DEFAULT NULL,
   `description` text,
+  `scholarship` text,
+  `condition` text,
   `document` text,
   `procedure` text,
   `schedule` text,
-  `scholarship` text,
-  `condition` text,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `status`
+--
+
+DROP TABLE IF EXISTS `status`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `status` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `createdAt` datetime NOT NULL,
+  `updatedAt` datetime NOT NULL,
+  `name` text NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `strata`
+--
+
+DROP TABLE IF EXISTS `strata`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `strata` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `createdAt` datetime NOT NULL,
+  `updatedAt` datetime NOT NULL,
+  `name` text NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -292,7 +390,7 @@ CREATE TABLE `subject` (
   PRIMARY KEY (`id`),
   KEY `majorId` (`majorId`),
   CONSTRAINT `subject_ibfk_1` FOREIGN KEY (`majorId`) REFERENCES `major` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -309,8 +407,34 @@ CREATE TABLE `user` (
   `name` text,
   `username` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `username` (`username`),
+  UNIQUE KEY `username_2` (`username`),
+  UNIQUE KEY `username_3` (`username`),
+  UNIQUE KEY `username_4` (`username`),
+  UNIQUE KEY `username_5` (`username`),
+  UNIQUE KEY `username_6` (`username`),
+  UNIQUE KEY `username_7` (`username`),
+  UNIQUE KEY `username_8` (`username`),
+  UNIQUE KEY `username_9` (`username`),
+  UNIQUE KEY `username_10` (`username`),
+  UNIQUE KEY `username_11` (`username`),
+  UNIQUE KEY `username_12` (`username`),
+  UNIQUE KEY `username_13` (`username`),
+  UNIQUE KEY `username_14` (`username`),
+  UNIQUE KEY `username_15` (`username`),
+  UNIQUE KEY `username_16` (`username`),
+  UNIQUE KEY `username_17` (`username`),
+  UNIQUE KEY `username_18` (`username`),
+  UNIQUE KEY `username_19` (`username`),
+  UNIQUE KEY `username_20` (`username`),
+  UNIQUE KEY `username_21` (`username`),
+  UNIQUE KEY `username_22` (`username`),
+  UNIQUE KEY `username_23` (`username`),
+  UNIQUE KEY `username_24` (`username`),
+  UNIQUE KEY `username_25` (`username`),
+  UNIQUE KEY `username_26` (`username`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -322,4 +446,4 @@ CREATE TABLE `user` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-10-11 22:41:30
+-- Dump completed on 2022-10-13  0:30:20

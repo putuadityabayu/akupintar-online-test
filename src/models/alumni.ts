@@ -5,6 +5,7 @@ export type AlumniAttribute = BaseAttribute & {
     name: string
     position: string
     image: string|null
+    campusId?: string|null
 }
 type AlumniCreation = {
     campus?: Campus
@@ -15,9 +16,10 @@ export class Alumni extends Model<AlumniAttribute,any,AlumniCreation> {
     declare image: string|null
     declare campus?: Campus
 
-    toAPI() {
-        const {createdAt:_,updatedAt:_a,...rest} = this.toJSON()
-        const campus = this.campus?.toAPI()
+    // @ts-ignore
+    toJSON() {
+        const {createdAt:_,updatedAt:_a,campusId:_b,...rest} = super.toJSON()
+        const campus = this.campus?.toJSON()
         return {...rest,campus};
     }
 }
@@ -39,5 +41,5 @@ Alumni.init({
     modelName:"alumni",
     tableName:"alumni",
     timestamps:true,
-    deletedAt:false
+    deletedAt:false,
 })
