@@ -16,7 +16,7 @@ export class Alumni extends Model<AlumniAttribute> {
 
     toAPI() {
         const {createdAt:_,updatedAt:_a,campusId:_b,...rest} = this.toJSON()
-        const campus = this.campus?.toJSON()
+        const campus = this.campus?.toAPI()
         return {...rest,campus};
     }
 }

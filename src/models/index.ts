@@ -14,21 +14,7 @@ import {User} from "./user";
 
 export default async function modelInitialization() {
     initRelation();
-    if(process.env.NODE_ENV !== "production") {
-        /*await Promise.all([
-            User.sync({alter:true}),
-            Campus.sync({alter:true}),
-        ])
-        await Faculty.sync({alter:true}),
-        await Major.sync({alter:true}),
-
-        await Promise.all([
-            Subject.sync({alter:true}),
-            News.sync({alter:true}),
-            Discussion.sync({alter:true}),
-            Alumni.sync({alter:true})
-        ])
-        await Comment.sync({alter:true})*/
+    if(process.env.NODE_ENV === "development") {
         await sequelize.sync({alter:true,force:false})
     }
     

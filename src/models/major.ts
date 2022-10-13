@@ -54,8 +54,8 @@ export class Major extends Model<MajorAttribute,any,MajorCreation> {
     
     toAPI() {
         const {createdAt:_,updatedAt:_a,strataId:_c,ukt_maximum:maximum,ukt_minimum:minimum,facultyId:_d,...data} = this.toJSON()
-        const faculty = this.faculty?.toJSON();
-        const strata = this.strata?.toJSON();
+        const faculty = this.faculty?.toAPI();
+        const strata = this.strata?.toAPI();
         return {
             ...data,
             ukt:{

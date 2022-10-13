@@ -26,7 +26,7 @@ export class Faculty extends Model<FacultyAttribute> {
 
     toAPI() {
         const {createdAt:_,updatedAt:_a,campusId:_b,campus:_c,...data} = super.toJSON()
-        const majors = this.majors?.map(c=>c.toJSON()) as Record<string,any>[]|undefined
+        const majors = this.majors?.map(c=>c.toAPI()) as Record<string,any>[]|undefined
         return {...data,majors}
     }
 }
