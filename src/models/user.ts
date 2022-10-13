@@ -1,5 +1,6 @@
 import type { Campus } from "./campus";
 import { Model,DataTypes,BaseAttribute,sequelize,baseAttribute } from "./helper";
+import type { Major } from "./major";
 
 export type UserAttribute = BaseAttribute & {
     name: string|null
@@ -13,11 +14,11 @@ export class User extends Model<UserAttribute> {
     declare createdAt: Date
     declare updatedAt: Date
     declare following?: Campus[]
+    declare major_likes?: Major[]
 
     toAPI() {
         const {id,username,name} = this;
-        const following = this.following?.map(c=>c.toAPI())
-        return {id,username,name,following}
+        return {id,username,name}
     }
 }
 

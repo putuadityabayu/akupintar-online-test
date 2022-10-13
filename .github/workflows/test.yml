@@ -1,0 +1,46 @@
+name: API test
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16.x]
+
+    env:
+      NODE_ENV: test
+      DB_HOST: localhost
+      DB_USER: root
+      DB_PASS: root
+      DB_PORT: 3306
+      DB_DATABASE: akupintar
+      PORT: 3000
+      JWT_SECRET: "this is jsonwebtoken secret"
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Mysql
+        run: |
+          sudo systemctl start mysql.service
+          mysql -u$DB_USER -p$DB_PASS -e 'DROP DATABASE IF EXISTS akupintar;'
+          mysql -u$DB_USER -p$DB_PASS -e 'CREATE DATABASE IF NOT EXISTS akupintar;'
+          mysql -u$DB_USER -p$DB_PASS $DB_DATABASE < ./sql/akupintar_data.sql
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+          cache-dependency-path: '**/package-lock.json'
+      - name: Install Depedencies
+        run: npm ci
+      - name: Test
+        run: npm test

@@ -1,5 +1,5 @@
-import HttpException from "@response/exception";
-import HttpResponse from "@response/response";
+import HttpException from "../response/exception";
+import HttpResponse from "../response/response";
 import { NextFunction,Response,Request } from "express";
 
 export default function responseMiddleware(response: any,req:Request,res: Response,next:NextFunction) {

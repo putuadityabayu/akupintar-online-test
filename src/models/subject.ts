@@ -4,17 +4,20 @@ import type { Major } from './major'
 export type SubjectAttribute = BaseAttribute & {
     name: string
     sks: number
+    majorId?: number|null
 }
 
-export class Subject extends Model<SubjectAttribute,any,{major?: Major}> {
+export type SubjectCreation = {
+    major?: Major
+}
+export class Subject extends Model<SubjectAttribute,any,SubjectCreation> {
     declare name: string
     declare sks: string
     declare major?: Major
 
     toAPI() {
-        const {createdAt:_,updatedAt:_a,...rest} = this.toJSON()
-        const major = this.major?.toAPI() as any
-        return {...rest,major}
+        const {createdAt:_,updatedAt:_a,majorId:_b,...rest} = this.toJSON()
+        return rest
     }
 }
 Subject.init({

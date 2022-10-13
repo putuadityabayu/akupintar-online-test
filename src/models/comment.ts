@@ -4,20 +4,17 @@ import type { User } from './user'
 
 export type CommentAttribute = BaseAttribute & {
     text: string
-}
-type CommentCreation = {
+    discussionId?: number|null
     discussion?: Discussion
 }
-export class Comment extends Model<CommentAttribute,any,CommentCreation> {
+export class Comment extends Model<CommentAttribute> {
     declare text: string
     declare user?: User
     declare discussion?: Discussion
 
     toAPI() {
-        const {updatedAt:_,...data} = this.toJSON();
-        const discussion = this.discussion?.toAPI() as any
-        const user = this.user?.toAPI()
-        return {...data,discussion,user}
+        const {updatedAt:_,discussionId:_a,...data} = this.toJSON();
+        return data
     }
 }
 Comment.init({

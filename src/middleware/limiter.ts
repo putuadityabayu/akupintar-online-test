@@ -1,4 +1,4 @@
-import RateLimitException from '@response/ratelimit_exception'
+import RateLimitException from '../response/ratelimit_exception'
 import rateLimit from 'express-rate-limit'
 
 const limiter = rateLimit({

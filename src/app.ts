@@ -4,11 +4,14 @@ import limiter from "./middleware/limiter";
 import responseMiddleware from "./middleware/response";
 import compression from 'compression';
 import authorization, { loginMiddleware } from "./middleware/authorization";
-import UserControllers from "@controllers/user";
+import UserControllers from "./controllers/user";
+import CampusControllers from "./controllers/campus";
 
 app.use(compression())
 app.disable("x-powered-by");
-app.use(limiter)
+if(process.env.NODE_ENV !== "test") {
+    app.use(limiter)
+}
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 
@@ -24,6 +27,11 @@ app.get("/",(_,res)=>{
 app.get("/me",loginMiddleware,UserControllers.user);
 app.post("/login",UserControllers.login)
 app.post("/register",UserControllers.registration)
+
+app.get("/campus",CampusControllers.search)
+app.post("/campus/:id",loginMiddleware,CampusControllers.follow)
+app.delete("/campus/:id",loginMiddleware,CampusControllers.unfollow)
+app.get("/campus/:id/majors",CampusControllers.findMajors);
 
 app.use(responseMiddleware)
 

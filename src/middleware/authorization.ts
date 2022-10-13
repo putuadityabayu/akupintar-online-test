@@ -1,6 +1,6 @@
-import { User } from '@models/user';
-import AuthorizationException from '@response/authorization_exception';
-import { jwtOptions } from '@src/config';
+import { User } from '../models/user';
+import AuthorizationException from '../response/authorization_exception';
+import { jwtOptions } from '../config';
 import { Request,Response,NextFunction } from 'express';
 import jwt,{JsonWebTokenError} from 'jsonwebtoken'
 
@@ -33,6 +33,7 @@ export default async function authorization(req: Request,_: Response,next: NextF
             return next()
         } catch(e) {
             if(e instanceof JsonWebTokenError) {
+                console.log(e.message)
                 return next(new AuthorizationException("invalid_access_token"))
             }
         }

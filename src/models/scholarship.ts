@@ -42,13 +42,6 @@ export class Scholarship extends Model<ScholarshipAttribute,any,ScholarshipCreat
     declare campus?: Campus[]
     declare discussion?: Discussion[]
 
-    toAPI() {
-        const data = this.toJSON();
-        const campus = this.campus?.map(c=>c.toAPI())
-
-        return {...data,campus}
-    }
-
 }
 Scholarship.init({
     ...baseAttribute,
